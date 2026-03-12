@@ -16,6 +16,7 @@ class Colors:
     BOLD = "\033[1m"
 
 def shuffle(list1):
+    # In-place shuffle by swapping each position with a random index.
     for i in range(0, len(list1)):
         new = random.randint(0, len(list1) - 1)
         temp = list1[new]
@@ -24,12 +25,14 @@ def shuffle(list1):
     return list1
 
 def main():
+    # Load runtime configuration once at startup.
     config = {}
     with open ("config.csv", "r", newline="", encoding="utf-8") as file:
         reader = csv.DictReader(file)
         for row in reader:
             config[row["Option"]] = row["Value"]
 
+    # Collect required student identity details with validation.
     userName = ""
     while userName == "":
         userName = input(f"{Colors.BLUE}Enter your name: {Colors.RESET}").strip()
@@ -46,7 +49,9 @@ def main():
 
     print()
     
+    # Main loop: show available quizzes, run one attempt, then ask whether to continue.
     while True:
+        # Refresh scores each cycle so attempts remain accurate.
         scores = []
         with open("scores.csv", "r", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
@@ -58,6 +63,7 @@ def main():
         quizAttempts = []
         maxAttempts = int(config["MaxAttempts"])
         print("Index\tQuiz Set\tAttempts Used/Allowed")
+        # Build and display per-quiz attempt counters for this student.
         for i in range(0, len(availableSets)):
             submittedAttempts = 0
             for row in scores:
@@ -67,6 +73,7 @@ def main():
             quizAttempts.append({"Quiz File": availableSets[i], "Attempts": submittedAttempts})
             print(f"[{i}]\t{availableSets[i]}\tAttempts: {submittedAttempts}/{maxAttempts}")
 
+        # Prompt for a valid quiz selection; -1 exits the app.
         selectedSet = -2
         while selectedSet == -2:
             try:
@@ -91,13 +98,16 @@ def main():
             print("Goodbye!")
             break
 
+        # Parse selected quiz CSV into question objects, then randomize choices and question order.
         quiz = []
         with open(f"./quiz_sets/{availableSets[selectedSet]}", "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter=",")
             next(reader)
             for row in reader:
-                question = row.pop(0)  # First column is the question
-                requiredAnswers = row.pop(0).split("&&")  # Second column contains correct answers, separated by &&
+                # Expected CSV layout per row: question, required_answers, choice1, choice2, ...
+                question = row.pop(0)
+                # Multiple correct answers are encoded as "answer1&&answer2" in the source CSV.
+                requiredAnswers = row.pop(0).split("&&")
                 choices = [choice for choice in row if (choice != "")]
 
                 quiz.append({"question": question, "requiredAnswers": requiredAnswers, "choices": shuffle(choices)})
@@ -109,8 +119,10 @@ def main():
 
         print(f"\nGood luck, {userName}!")
 
-        startTime = datetime.now()  # Start the timer
+        # Start timing this attempt for score log duration.
+        startTime = datetime.now()  
 
+        # Ask each question, validate answer format, and compute per-item score.
         totalScore = 0
         for number in quiz:
             validResponseLetter = []
@@ -131,14 +143,18 @@ def main():
                     responseLetters = input(f"{Colors.BLUE}Enter all letters (separated by space): {Colors.RESET}").upper().split(" ")
 
                 for responseLetter in responseLetters:
+                    # Convert letter input (A/B/C...) back to the corresponding choice text.
                     if responseLetter in letters and letters.index(responseLetter) < len(number["choices"]):
                         validResponseLetter.append(number["choices"][letters.index(responseLetter)])
                     else:
                         print(f"{Colors.RED}Invalid letter choice.{Colors.RESET}")
+                        # Reset and re-ask the same question if any invalid token is entered.
                         validResponseLetter = []
 
+            # Symmetric difference gives all mismatches: missing correct answers or extra wrong picks.
             missingOrExcess = set(validResponseLetter) ^ set(number["requiredAnswers"])
 
+            # Partial credit: each mismatch subtracts an equal fraction from a perfect score of 1.0.
             score = 1 - len(missingOrExcess) / len(number["requiredAnswers"])
             if score < 0:
                 score = 0
@@ -155,6 +171,7 @@ def main():
 
             totalScore += score
 
+        # Summarize result and provide user feedback.
         scorePercent = totalScore * 100 / len(quiz)
         print(f"{Colors.MAGENTA}Final Score: {scorePercent:.2f}%{Colors.RESET}")
 
@@ -165,10 +182,12 @@ def main():
         else:
             print(f"{Colors.YELLOW}Good effort {userName}! Keep studying.{Colors.RESET}")
 
+        # Persist this attempt for future attempt-limit checks and history.
         with open("scores.csv", "a", newline="", encoding="utf-8") as file:
             writer = csv.writer(file, delimiter=",")
             writer.writerow([userName, studentID, availableSets[selectedSet], f"{scorePercent:.2f}%", datetime.now(), datetime.now() - startTime])
 
+        # Exit or continue another attempt based on user choice.
         if input(f"{Colors.BLUE}Do you want to take another quiz? (Y/N): {Colors.RESET}").upper() == "N":
             print("Goodbye!")
             break
