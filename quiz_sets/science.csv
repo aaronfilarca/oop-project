@@ -1,42 +1,51 @@
 Question,Answer,Choice1,Choice2,Choice3,Choice4,Choice5,Choice6,Choice7,Choice8
-What do humans breathe out?,Carbon Dioxide,Oxygen,Carbon Dioxide,Nitrogen,Hydrogen
-What part of the body pumps blood?,Heart,Heart,Lung,Brain,Stomach
-What planet do humans live on?,Earth,Mars,Venus,Earth,Jupiter
-What do bees collect from flowers?,Nectar,Nectar,Sand,Water,Leaves
-Which animals can fly?,Bird&&Bat,Dog,Cat,Bird,Bat,Fish
-What do plants release into the air?,Oxygen,Oxygen,Carbon Dioxide,Smoke,Dust
-Which are types of weather?,Rain&&Snow&&Wind,Rain,Snow,Wind,Rock,Metal
-What do we call frozen water?,Ice,Steam,Ice,Sand,Cloud
-Which animals lay eggs?,Chicken&&Turtle&&Snake,Chicken,Dog,Turtle,Snake,Cat
-What organ helps us breathe?,Lungs,Lungs,Heart,Brain,Stomach
-Which are parts of the human body?,Arm&&Leg&&Head,Arm,Leg,Head,Wheel,Door
-What do we call water falling from clouds?,Rain,Snow,Wind,Rain,Smoke
-Which animals have gills?,Fish&&Shark,Fish,Dog,Shark,Bird
-What is the center of our solar system?,Sun,Earth,Moon,Sun,Mars
-Which are forms of water?,Ice&&Liquid&&Steam,Ice,Liquid,Steam,Rock,Fire
-What do magnets attract?,Metal,Wood,Plastic,Metal,Paper
-Which animals are reptiles?,Snake&&Lizard,Snake,Lizard,Dog,Cat
-What part of the plant makes seeds?,Flower,Leaf,Stem,Flower,Root
-Which animals have fur?,Dog&&Cat,Dog,Cat,Fish,Bird
-What is the boiling point of water?,100°C,50°C,100°C,0°C,200°C
-Which are natural sources of light?,Sun&&Fire,Sun,Fire,Rock,Water
-What do we call baby frogs?,Tadpoles,Tadpoles,Chicks,Puppies,Kittens
-Which animals live on land?,Lion&&Elephant,Lion,Elephant,Shark,Whale
-What do humans use to see?,Eyes,Eyes,Ears,Nose,Hands
-Which are parts of the solar system?,Planets&&Moons&&Asteroids,Planets,Moons,Asteroids,Clouds,Rivers
-What do we call moving air?,Wind,Rain,Wind,Snow,Smoke
-Which animals are insects?,Ant&&Bee&&Butterfly,Ant,Bee,Butterfly,Dog,Cat
-What helps plants grow?,Water&&Sunlight&&Soil,Water,Sunlight,Soil,Plastic,Metal
-What gas do plants take in?,Carbon Dioxide,Oxygen,Carbon Dioxide,Nitrogen,Hydrogen
-Which animals have shells?,Turtle&&Snail,Turtle,Snail,Dog,Cat
-What do we call the study of stars?,Astronomy,Biology,Chemistry,Astronomy,Geology
-Which are types of rocks?,Igneous&&Sedimentary&&Metamorphic,Igneous,Sedimentary,Metamorphic,Plastic,Glass
-What keeps us on the ground?,Gravity,Wind,Gravity,Magnetism,Light
-Which are organs in the human body?,Heart&&Brain&&Lungs,Heart,Brain,Lungs,Leaf,Stone
-What do we call animals that eat plants?,Herbivores,Carnivores,Herbivores,Omnivores,Predators
-Which are examples of simple machines?,Lever&&Wheel&&Pulley,Lever,Wheel,Pulley,Cloud,Leaf
-What tool measures temperature?,Thermometer,Scale,Thermometer,Ruler,Clock
-Which are parts of the Earth?,Crust&&Mantle&&Core,Crust,Mantle,Core,Cloud,Ocean
-What do we call animals active at night?,Nocturnal,Nocturnal,Diurnal,Herbivore,Carnivore
-Which animals are amphibians?,Frog&&Salamander,Frog,Salamander,Dog,Cat
-What do we call water vapor in the air?,Humidity,Wind,Humidity,Smoke,Dust
+What is the chemical symbol for water?,H2O,O2,H2O,CO2,HO,,,,
+Which of the following are planets in our solar system?,Mars&&Venus,Mars,Pluto,Venus,The Sun,,,,
+Is the Earth flat?,False,True,False,,,,,,
+What gas do plants primarily absorb for photosynthesis?,Carbon Dioxide,Oxygen,Nitrogen,Carbon Dioxide,,,,,
+Which of the following are primary colors of light?,Red&&Green&&Blue,Red,Yellow,Blue,Green,Cyan,Magenta,,
+What is the hardest natural substance on Earth?,Diamond,Gold,Iron,Diamond,Quartz,Graphite,,,
+True or False: Sound travels faster in water than in air.,True,True,False,,,,,,
+Which of the following animals are mammals?,Whale&&Bat&&Human,Shark,Frog,Whale,Bat,Human,Eagle,,
+What is the center of an atom called?,Nucleus,Electron,Proton,Nucleus,,,,,
+Which planet is known as the Red Planet?,Mars,Venus,Mars,Jupiter,Saturn,,,,
+What force keeps us on the ground?,Gravity,Friction,Magnetism,Gravity,Tension,,,,
+Water boils at what temperature in Celsius at sea level?,100,0,50,100,212,,,,
+Which of these are states of matter?,Solid&&Liquid&&Gas,Solid,Plasma,Liquid,Energy,Gas,Light,Sound,
+How many legs does an insect generally have?,6,4,6,8,10,,,,
+What is the largest organ in the human body?,Skin,Heart,Liver,Brain,Skin,Lungs,,,
+Which of these are renewable energy sources?,Solar&&Wind,Coal,Solar,Natural Gas,Wind,Oil,,,
+What type of animal is a frog?,Amphibian,Reptile,Mammal,Amphibian,Bird,Fish,,,
+What do bees collect from flowers?,Nectar&&Pollen,Leaves,Nectar,Roots,Pollen,Bark,Seeds,Sap,
+The sun is a planet.,False,True,False,,,,,,
+Which organ pumps blood through the body?,Heart,Lungs,Brain,Heart,Kidneys,Stomach,Liver,,
+What is the freezing point of water in Fahrenheit?,32,0,32,100,-32,,,,
+Which of these birds cannot fly?,Penguin&&Ostrich,Eagle,Penguin,Sparrow,Ostrich,Pigeon,,,
+What is the main source of energy for the Earth?,The Sun,The Moon,The Sun,Geothermal heat,Wind,,,,
+What part of the plant conducts photosynthesis?,Leaf,Root,Stem,Flower,Leaf,Seed,,,
+Which of the following are metals?,Iron&&Gold&&Copper,Iron,Oxygen,Gold,Carbon,Copper,Sulfur,Helium,
+How many bones are in the adult human body?,206,106,206,306,,,,,
+Animals that eat only plants are called what?,Herbivores,Carnivores,Omnivores,Herbivores,,,,,
+What are the main components of air?,Nitrogen&&Oxygen,Hydrogen,Nitrogen,Oxygen,Helium,Argon,Neon,Krypton,Xenon
+Does ice sink or float in water?,Float,Sink,Float,,,,,,
+What causes the ocean tides?,Moon's gravitational pull,Wind,Earth's rotation,Moon's gravitational pull,Sun's heat,,,,
+Which of these are human senses?,Sight&&Hearing&&Taste,Sight,Flight,Hearing,Telepathy,Taste,Invisibility,,
+What shape is DNA?,Double Helix,Straight line,Circle,Double Helix,Square,Triangle,,,
+Which animal is known for having a long neck?,Giraffe,Elephant,Zebra,Giraffe,Hippo,,,,
+What is the closest planet to the Sun?,Mercury,Venus,Earth,Mars,Mercury,Jupiter,Saturn,Uranus,Neptune
+What do caterpillars turn into?,Butterflies,Beetles,Moths,Butterflies,Spiders,,,,
+Which of these are parts of the water cycle?,Evaporation&&Condensation&&Precipitation,Evaporation,Combustion,Condensation,Digestion,Precipitation,Respiration,,
+How many colors are in a rainbow?,7,5,6,7,8,9,,,
+True or False: Humans need oxygen to survive.,True,True,False,,,,,,
+What is the largest ocean on Earth?,Pacific Ocean,Atlantic Ocean,Indian Ocean,Arctic Ocean,Pacific Ocean,,,,
+Which part of the eye gives it its color?,Iris,Pupil,Retina,Cornea,Iris,Lens,,,
+Which of these are types of clouds?,Cumulus&&Cirrus,Cumulus,Tornado,Cirrus,Hurricane,Tsunami,,,
+What do we call a scientist who studies rocks?,Geologist,Biologist,Chemist,Geologist,Astronomer,Physicist,Meteorologist,
+What is the process by which a liquid turns into a gas?,Evaporation,Melting,Freezing,Evaporation,Condensation,,,,
+Which of these fruits are citrus fruits?,Orange&&Lemon,Apple,Orange,Banana,Lemon,Grape,Strawberry,Pear,Peach
+What is the chemical formula for salt?,NaCl,H2O,CO2,NaCl,HCl,NaOH,,,
+Which of these are extinct animals?,Dinosaur&&Dodo,Dinosaur,Tiger,Dodo,Elephant,Panda,Rhino,,
+What instrument is used to measure temperature?,Thermometer,Barometer,Thermometer,Microscope,Telescope,Speedometer,,,
+What is the primary gas found in the Earth's atmosphere?,Nitrogen,Oxygen,Carbon Dioxide,Nitrogen,Hydrogen,,,,
+Which of these belong to the fungi kingdom?,Mushroom&&Yeast,Mushroom,Fern,Pine tree,Yeast,Algae,Moss,Rose,Grass
+True or False: Lightning is hotter than the surface of the sun.,True,True,False,,,,,,
