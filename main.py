@@ -26,117 +26,170 @@ def shuffle(list1):
 
 
 def main():
-    # List all files in the quiz directory
-    availableSets = os.listdir("./quiz_sets/")
-    selectedSet = -1
+    config = {}
+    with open ("config.csv", "r", newline="", encoding="utf-8") as file:
+        reader = csv.reader(file, delimiter=",")
+        for row in reader:
+            config[row[0]] = row[1]
 
-    # Loop until the user provides a valid integer index for a quiz set
-    while selectedSet == -1:
-        try:
-            for i in range(0, len(availableSets)):
-                print(f"[{i}] {availableSets[i]}")
-            selectedSet = int(input("Enter the index of the quiz set you want to take: "))
-        except ValueError:
-            print("Input must be index integer.")
-            selectedSet = -1
-            continue
-
-        if selectedSet >= len(availableSets):
-            print(f"You must enter a value less than {len(availableSets)}")
-            selectedSet = -1
-            continue
-
-    # Ensure the user enters a non-empty name
+        # Ensure the user enters a non-empty name
     userName = ""
     while userName == "":
         userName = input("Enter your name: ").strip()
         if userName == "":
             print("Please enter your name.")
 
-    print(f"\n{Colors.CYAN}Good luck, {userName}!{Colors.RESET}")
+    # Ensure the user enters a Student ID
+    studentID = 0
+    while studentID == 0:
+        try:
+            studentID = input("Enter your Student ID: ")
+        except ValueError:
+            print("Please enter a valid Student ID")
+            studentID = 0
 
-    startTime = datetime.now()  # Start the timer
+    while True:
+        # Read configuration settings from config.csv into a dictionary
 
-    quiz = []
-    totalScore = 0
+        scores = []
+        with open("scores.csv", "r", newline="", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                scores.append(row)
+        
+        # List all files in the quiz directory
+        availableSets = os.listdir("./quiz_sets/")
 
-    with open(f"./quiz_sets/{availableSets[selectedSet]}", "r", newline="") as file:
-        reader = csv.reader(file, delimiter=",")
-        next(reader)
-        for row in reader:
-            question = row.pop(0)  # First column is the question
-            requiredAnswers = row.pop(0).split("&&")  # Second column contains correct answers, separated by &&
-            choices = row  # Remaining columns are the multiple-choice options
 
-            # Store the question data and shuffle the choice order
-            quiz.append({"question": question, "requiredAnswers": requiredAnswers, "choices": shuffle(choices)})
+        quizAttempts = []
+        maxAttempts = int(config["MaxAttempts"])
+        for i in range(0, len(availableSets)):
+            submittedAttempts = 0
+            for row in scores:
+                if row["Student ID"] == str(studentID) and row["Quiz File"] == availableSets[i]:
+                    submittedAttempts += 1
+            
+            # append to list
+            quizAttempts.append({"Quiz File": availableSets[i], "Attempts": submittedAttempts})
+            print(f"[{i}] {availableSets[i]}\t\tAttempts: {submittedAttempts}/{maxAttempts}")
+
+        # Ask the user which quiz set they want to take
+        selectedSet = -2
+        while selectedSet == -2:
+            try:
+                selectedSet = int(input("Enter the index of the quiz set you want to take [enter -1 to exit]: "))
+            except ValueError:
+                print("Input must be index integer.")
+                selectedSet = -2
+                continue
+
+            if selectedSet >= len(availableSets):
+                print(f"You must enter a value less than {len(availableSets)}")
+                selectedSet = -2
+                continue
+
+            if quizAttempts[selectedSet]["Attempts"] >= maxAttempts:
+                print(f"You have already attempted this quiz {maxAttempts} times. Please select a different quiz.")
+                selectedSet = -2
+                continue
+
+        if selectedSet < 0:
+            print("Goodbye!")
+            break
+
+        print(f"\n{Colors.CYAN}Good luck, {userName}!{Colors.RESET}")
+
+        startTime = datetime.now()  # Start the timer
+
+        quiz = []
+        totalScore = 0
+
+        with open(f"./quiz_sets/{availableSets[selectedSet]}", "r", newline="", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter=",")
+            next(reader)
+            for row in reader:
+                question = row.pop(0)  # First column is the question
+                requiredAnswers = row.pop(0).split("&&")  # Second column contains correct answers, separated by &&
+                choices = row  # Remaining columns are the multiple-choice options
+
+                # Store the question data and shuffle the choice order
+                quiz.append({"question": question, "requiredAnswers": requiredAnswers, "choices": shuffle(choices)})
 
         # Shuffle the order of the questions themselves
         quiz = shuffle(quiz)
 
-    for number in quiz:
-        validResponseLetter = []
+        maxNumberOfItems = int(config["MaxNumberOfItems"])
+        quiz = quiz[:maxNumberOfItems]
 
-        while len(validResponseLetter) == 0:
-            print(f"\n{Colors.WHITE}{Colors.BOLD}{number['question']}{Colors.RESET}")
+        for number in quiz:
+            validResponseLetter = []
 
-            # Assign letters A-H to the available choices
-            letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
-            for i in range(0, len(number["choices"])):
-                print(f"{letters[i]}. {number['choices'][i]}")
+            while len(validResponseLetter) == 0:
+                print(f"\n{Colors.WHITE}{Colors.BOLD}{number['question']}{Colors.RESET}")
 
-            # Handle single vs. multiple answer inputs
-            if len(number["requiredAnswers"]) == 1:
-                responseLetters = input("Enter the letter of the correct answer: ").upper().split(" ")
-                if len(responseLetters) != 1:
-                    print(f"{Colors.YELLOW}Invalid input. Use a single letter.{Colors.RESET}")
-                    continue
-            else:
-                responseLetters = input("Enter all letters (separated by space): ").upper().split(" ")
+                # Assign letters A-H to the available choices
+                letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
+                for i in range(0, len(number["choices"])):
+                    print(f"{letters[i]}. {number['choices'][i]}")
 
-            # Convert letter input back into the actual choice text
-            for responseLetter in responseLetters:
-                if responseLetter in letters and letters.index(responseLetter) < len(number["choices"]):
-                    validResponseLetter.append(number["choices"][letters.index(responseLetter)])
+                # Handle single vs. multiple answer inputs
+                if len(number["requiredAnswers"]) == 1:
+                    responseLetters = input("Enter the letter of the correct answer: ").upper().split(" ")
+                    if len(responseLetters) != 1:
+                        print(f"{Colors.YELLOW}Invalid input. Use a single letter.{Colors.RESET}")
+                        continue
                 else:
-                    print(f"{Colors.YELLOW}Invalid letter choice.{Colors.RESET}")
-                    validResponseLetter = []
+                    responseLetters = input("Enter all letters (separated by space): ").upper().split(" ")
 
-        # Compare sets to find items missing from user's answer or extra items they included
-        missingOrExcess = set(validResponseLetter) ^ set(number["requiredAnswers"])
+                # Convert letter input back into the actual choice text
+                for responseLetter in responseLetters:
+                    if responseLetter in letters and letters.index(responseLetter) < len(number["choices"]):
+                        validResponseLetter.append(number["choices"][letters.index(responseLetter)])
+                    else:
+                        print(f"{Colors.YELLOW}Invalid letter choice.{Colors.RESET}")
+                        validResponseLetter = []
 
-        # Calculate partial credit: 1 point minus a penalty for every error
-        score = 1 - len(missingOrExcess) / len(number["requiredAnswers"])
-        if score < 0:
-            score = 0
+            # Compare sets to find items missing from user's answer or extra items they included
+            missingOrExcess = set(validResponseLetter) ^ set(number["requiredAnswers"])
 
-        correct_answers = ", ".join(number["requiredAnswers"])
+            # Calculate partial credit: 1 point minus a penalty for every error
+            score = 1 - len(missingOrExcess) / len(number["requiredAnswers"])
+            if score < 0:
+                score = 0
 
-        # Visual feedback based on how correct the user was
-        if score == 1.0:
-            print(f"{Colors.GREEN}Correct!{Colors.RESET} Score: {score:.2f}\n")
-        elif score == 0.0:
-            print(f"{Colors.RED}Incorrect.{Colors.RESET} Answer(s): {Colors.GREEN}{correct_answers}{Colors.RESET}\n")
+            if config["ShowScoreAndCorrectAnswers"].upper() == "TRUE":
+                correct_answers = ", ".join(number["requiredAnswers"])
+
+                # Visual feedback based on how correct the user was
+                if score == 1.0:
+                    print(f"{Colors.GREEN}Correct!{Colors.RESET} Score: {score:.2f}\n")
+                elif score == 0.0:
+                    print(f"{Colors.RED}Incorrect.{Colors.RESET} Answer(s): {Colors.GREEN}{correct_answers}{Colors.RESET}\n")
+                else:
+                    print(f"{Colors.YELLOW}Partial Credit.{Colors.RESET} Answer(s): {Colors.GREEN}{correct_answers}{Colors.RESET}\n")
+
+            totalScore += score
+
+        scorePercent = totalScore * 100 / len(quiz)
+        print(f"Final Score: {Colors.BOLD}{scorePercent:.2f}%{Colors.RESET}")
+
+        # Final words of encouragement
+        if scorePercent == 100:
+            print(f"{Colors.GREEN}Perfect score! Congratulations {Colors.MAGENTA}{userName}!{Colors.RESET}")
+        elif scorePercent >= 70:
+            print(f"{Colors.CYAN}Great job {Colors.MAGENTA}{userName}! Almost there.{Colors.RESET}")
         else:
-            print(f"{Colors.YELLOW}Partial Credit.{Colors.RESET} Answer(s): {Colors.GREEN}{correct_answers}{Colors.RESET}\n")
+            print(f"{Colors.YELLOW}Good effort {Colors.MAGENTA}{userName}! Keep studying.{Colors.RESET}")
 
-        totalScore += score
+        # Log the result: Name, Score, Quiz File, Timestamp, and Time Taken
+        with open("scores.csv", "a", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file, delimiter=",")
+            writer.writerow([userName, studentID, availableSets[selectedSet], f"{scorePercent:.2f}%", datetime.now(), datetime.now() - startTime])
 
-    scorePercent = totalScore * 100 / len(quiz)
-    print(f"Final Score: {Colors.BOLD}{scorePercent:.2f}%{Colors.RESET}")
-
-    # Final words of encouragement
-    if scorePercent == 100:
-        print(f"{Colors.GREEN}Perfect score! Congratulations {Colors.MAGENTA}{userName}!{Colors.RESET}")
-    elif scorePercent >= 70:
-        print(f"{Colors.CYAN}Great job {Colors.MAGENTA}{userName}! Almost there.{Colors.RESET}")
-    else:
-        print(f"{Colors.YELLOW}Good effort {Colors.MAGENTA}{userName}! Keep studying.{Colors.RESET}")
-
-    # Log the result: Name, Score, Quiz File, Timestamp, and Time Taken
-    with open("scores.csv", "a", newline="") as file:
-        writer = csv.writer(file, delimiter=",")
-        writer.writerow([userName, f"{scorePercent:.2f}%", availableSets[selectedSet], datetime.now(), datetime.now() - startTime])
+        print("Do you want to take another quiz? (Y/N)")
+        if input().upper() == "N":
+            print("Goodbye!")
+            break
 
 
 if __name__ == "__main__":

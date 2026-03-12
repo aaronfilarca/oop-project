@@ -1,0 +1,4 @@
+Option,Value
+MaxNumberOfItems,10
+MaxAttempts,1
+ShowScoreAndCorrectAnswers,TRUE
