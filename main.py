@@ -52,7 +52,7 @@ def main():
 
     print()
 
-       # Main loop: show available quizzes, run one attempt, then ask whether to continue.
+    # Main loop: show available quizzes, run one attempt, then ask whether to continue.
     while True:
         # Refresh scores each cycle so attempts remain accurate.
         scores = []
@@ -126,8 +126,8 @@ def main():
         # Confirm the timed quiz policy before starting the attempt.
         if timerSeconds > 0:
             timerText = f"{timerMinutes} minute(s)"
-            startTimedQuiz = input(f"{Colors.RED}This quiz is timed. You will have {timerText}. Start now? (Y/N): {Colors.RESET}").strip().upper()
-            if startTimedQuiz != "Y":
+            startTimedQuiz = input(f"{Colors.RED}This quiz is timed. You will have {timerText}. Start now? (Y/N): {Colors.RESET}")
+            if startTimedQuiz.strip().upper() != "Y":
                 print(f"{Colors.CYAN}Quiz start cancelled. Returning to quiz selection.{Colors.RESET}")
                 print()
                 continue
@@ -207,7 +207,18 @@ def main():
             attemptDateTaken = str(startTime)
             scores = [row for row in scores if  row["Date Taken"] != attemptDateTaken]
 
-            scores.append({"Name": userName,"Student ID": studentID,"Quiz File": availableSets[selectedSet],"Score": f"{(totalScore / len(quiz)) * 100:.2f}%","Questions Answered": questionsAnswered,"Questions Total": len(quiz),"Date Taken": attemptDateTaken,"Duration": str(datetime.now() - startTime)})
+            scores.append(
+                {
+                    "Name": userName,
+                    "Student ID": studentID,
+                    "Quiz File": availableSets[selectedSet],
+                    "Score": f"{(totalScore / len(quiz)) * 100:.2f}%",
+                    "Questions Answered": questionsAnswered,
+                    "Questions Total": len(quiz),
+                    "Date Taken": attemptDateTaken,
+                    "Duration": str(datetime.now() - startTime),
+                }
+            )
 
             with open("scores.csv", "w", newline="", encoding="utf-8") as file:
                 writer = csv.DictWriter(file, fieldnames=["Name", "Student ID", "Quiz File", "Score", "Questions Answered", "Questions Total", "Date Taken", "Duration"])

@@ -2,4 +2,4 @@ Option,Value
 MaxNumberOfItems,5
 MaxAttempts,2
 ShowScoreAndCorrectAnswers,TRUE
-TimerMinutes,0.5
+TimerMinutes,1
