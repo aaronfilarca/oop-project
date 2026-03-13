@@ -1,3 +1,5 @@
 Name,Student ID,Quiz File,Score,Questions Answered,Questions Total,Date Taken,Duration
 Aaron,102,math.csv,50.00%,2,2,2026-03-13 14:11:51.253087,0:00:17.595885
 Aaron,102,math.csv,0.00%,1,2,2026-03-13 14:12:16.745757,0:00:13.004108
+Aaron,102,science.csv,20.00%,1,5,2026-03-13 14:23:30.061086,0:02:24.809978
+Aaron,102,science.csv,20.00%,1,5,2026-03-13 14:27:25.327281,0:00:51.508176

@@ -150,7 +150,6 @@ def main():
                 remainingSeconds = int((endTime - datetime.now()).total_seconds())
                 if remainingSeconds < 0:
                     print(f"{Colors.RED}Time is up!{Colors.RESET}")
-                    print()
                     break
 
                 minutesLeft = remainingSeconds // 60
