@@ -1,7 +1,7 @@
 import csv
 import random
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class Colors:
     GREEN = "\033[92m"
@@ -32,6 +32,9 @@ def main():
         for row in reader:
             config[row["Option"]] = row["Value"]
 
+    timerMinutes = float(config["TimerMinutes"])
+    timerSeconds = timerMinutes * 60
+
     # Collect required student identity details with validation.
     userName = ""
     while userName == "":
@@ -48,8 +51,8 @@ def main():
             studentID = 0
 
     print()
-    
-    # Main loop: show available quizzes, run one attempt, then ask whether to continue.
+
+       # Main loop: show available quizzes, run one attempt, then ask whether to continue.
     while True:
         # Refresh scores each cycle so attempts remain accurate.
         scores = []
@@ -57,21 +60,22 @@ def main():
             reader = csv.DictReader(file)
             for row in reader:
                 scores.append(row)
-        
-        availableSets = os.listdir("./quiz_sets/")
 
+        availableSets = os.listdir("./quiz_sets/")
         quizAttempts = []
         maxAttempts = int(config["MaxAttempts"])
-        print("Index\tQuiz Set\tAttempts Used/Allowed")
+
         # Build and display per-quiz attempt counters for this student.
+        print("Index\tQuiz Set\tAttempts Used/Allowed")
         for i in range(0, len(availableSets)):
             submittedAttempts = 0
             for row in scores:
                 if row["Student ID"] == str(studentID) and row["Quiz File"] == availableSets[i]:
                     submittedAttempts += 1
-            
             quizAttempts.append({"Quiz File": availableSets[i], "Attempts": submittedAttempts})
             print(f"[{i}]\t{availableSets[i]}\tAttempts: {submittedAttempts}/{maxAttempts}")
+
+        print()
 
         # Prompt for a valid quiz selection; -1 exits the app.
         selectedSet = -2
@@ -98,6 +102,8 @@ def main():
             print("Goodbye!")
             break
 
+        print()
+
         # Parse selected quiz CSV into question objects, then randomize choices and question order.
         quiz = []
         with open(f"./quiz_sets/{availableSets[selectedSet]}", "r", newline="", encoding="utf-8") as file:
@@ -117,18 +123,44 @@ def main():
         maxNumberOfItems = int(config["MaxNumberOfItems"])
         quiz = quiz[:maxNumberOfItems]
 
-        print(f"\nGood luck, {userName}!")
+        # Confirm the timed quiz policy before starting the attempt.
+        if timerSeconds > 0:
+            timerText = f"{timerMinutes} minute(s)"
+            startTimedQuiz = input(f"{Colors.RED}This quiz is timed. You will have {timerText}. Start now? (Y/N): {Colors.RESET}").strip().upper()
+            if startTimedQuiz != "Y":
+                print(f"{Colors.CYAN}Quiz start cancelled. Returning to quiz selection.{Colors.RESET}")
+                print()
+                continue
+
+        print()
+        print(f"Good luck, {userName}!")
+        print()
 
         # Start timing this attempt for score log duration.
-        startTime = datetime.now()  
+        startTime = datetime.now()
+        if timerSeconds > 0:
+            endTime = startTime + timedelta(seconds=timerSeconds)
 
         # Ask each question, validate answer format, and compute per-item score.
         totalScore = 0
+        questionsAnswered = 0
+
         for number in quiz:
+            if timerSeconds > 0:
+                remainingSeconds = int((endTime - datetime.now()).total_seconds())
+                if remainingSeconds < 0:
+                    print(f"{Colors.RED}Time is up!{Colors.RESET}")
+                    print()
+                    break
+
+                minutesLeft = remainingSeconds // 60
+                secondsLeft = remainingSeconds % 60
+                print(f"{Colors.RED}Time left: {minutesLeft:02d}:{secondsLeft:02d}{Colors.RESET}")
+
             validResponseLetter = []
 
             while len(validResponseLetter) == 0:
-                print(f"\n{Colors.MAGENTA}{number['question']}{Colors.RESET}")
+                print(f"{Colors.MAGENTA}{number['question']}{Colors.RESET}")
 
                 letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
                 for i in range(0, len(number["choices"])):
@@ -163,15 +195,28 @@ def main():
                 correct_answers = ", ".join(number["requiredAnswers"])
 
                 if score == 1.0:
-                    print(f"{Colors.GREEN}Correct!{Colors.RESET} Score: {score:.2f}\n")
+                    print(f"{Colors.GREEN}Correct!{Colors.RESET} Score: {score:.2f}")
                 elif score == 0.0:
-                    print(f"{Colors.RED}Incorrect.{Colors.RESET} Score: {score:.2f}. Answer(s): {Colors.GREEN}{correct_answers}{Colors.RESET}\n")
+                    print(f"{Colors.RED}Incorrect.{Colors.RESET} Score: {score:.2f}. Answer(s): {Colors.GREEN}{correct_answers}{Colors.RESET}")
                 else:
-                    print(f"{Colors.YELLOW}Partial Credit.{Colors.RESET} Score: {score:.2f}. Answer(s): {Colors.GREEN}{correct_answers}{Colors.RESET}\n")
+                    print(f"{Colors.YELLOW}Partial Credit.{Colors.RESET} Score: {score:.2f}. Answer(s): {Colors.GREEN}{correct_answers}{Colors.RESET}")
 
             totalScore += score
+            questionsAnswered += 1
+
+            # After each question, update the CSV with the current progress so that if the app is closed mid-quiz, the student still has a record of their attempt and partial score.
+            attemptDateTaken = str(startTime)
+            scores = [row for row in scores if  row["Date Taken"] != attemptDateTaken]
+
+            scores.append({"Name": userName,"Student ID": studentID,"Quiz File": availableSets[selectedSet],"Score": f"{(totalScore / len(quiz)) * 100:.2f}%","Questions Answered": questionsAnswered,"Questions Total": len(quiz),"Date Taken": attemptDateTaken,"Duration": str(datetime.now() - startTime)})
+
+            with open("scores.csv", "w", newline="", encoding="utf-8") as file:
+                writer = csv.DictWriter(file, fieldnames=["Name", "Student ID", "Quiz File", "Score", "Questions Answered", "Questions Total", "Date Taken", "Duration"])
+                writer.writeheader()
+                writer.writerows(scores)
 
         # Summarize result and provide user feedback.
+        print()
         scorePercent = totalScore * 100 / len(quiz)
         print(f"{Colors.MAGENTA}Final Score: {scorePercent:.2f}%{Colors.RESET}")
 
@@ -182,12 +227,8 @@ def main():
         else:
             print(f"{Colors.YELLOW}Good effort {userName}! Keep studying.{Colors.RESET}")
 
-        # Persist this attempt for future attempt-limit checks and history.
-        with open("scores.csv", "a", newline="", encoding="utf-8") as file:
-            writer = csv.writer(file, delimiter=",")
-            writer.writerow([userName, studentID, availableSets[selectedSet], f"{scorePercent:.2f}%", datetime.now(), datetime.now() - startTime])
-
         # Exit or continue another attempt based on user choice.
+        print()
         if input(f"{Colors.BLUE}Do you want to take another quiz? (Y/N): {Colors.RESET}").upper() == "N":
             print("Goodbye!")
             break
