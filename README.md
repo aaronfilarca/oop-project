@@ -1,6 +1,6 @@
-# OOP Quiz Project
+# PyQuiz
 
-A terminal-based Python quiz app for running timed, repeatable quiz sets from CSV files. Students can choose a quiz, answer randomized questions, and have their scores saved automatically.
+PyQuiz is a terminal-based Python quiz app for running timed, repeatable quiz sets from CSV files. Students can choose a quiz, answer randomized questions, and have their scores saved automatically.
 
 ## Features
 
@@ -35,12 +35,12 @@ oop-project/
 
 1. Install Python 3 on your device.
 2. Save the source code as `main.py` if you are setting the project up manually.
-   - Alternatively, you can clone the project using `git clone https://github.com/aaronfilarca/oop-project`
+   - Alternatively, you can clone the project using `git clone https://github.com/aaronfilarca/PyQuiz`
 3. Prepare the files and project folders in one main project directory.
 4. Make sure the program structure includes these components:
 
 ```text
-oop-project/
+PyQuiz/
 |-- main.py
 |-- config.csv
 |-- scores.csv

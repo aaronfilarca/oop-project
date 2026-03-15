@@ -32,6 +32,9 @@ def main():
         for row in reader:
             config[row["Option"]] = row["Value"]
 
+    print(f"{Colors.BOLD}{Colors.CYAN}Welcome to PyQuiz!{Colors.RESET}")
+    print()
+
     timerMinutes = float(config["TimerMinutes"])
     timerSeconds = timerMinutes * 60
 
@@ -99,7 +102,7 @@ def main():
                 continue
 
         if selectedSet < 0:
-            print("Goodbye!")
+            print("Thanks for using PyQuiz!")
             break
 
         print()
@@ -133,6 +136,7 @@ def main():
                 continue
 
         print()
+        print(f"{Colors.CYAN}PyQuiz{Colors.RESET}")
         print(f"Good luck, {userName}!")
         print()
 
@@ -240,7 +244,7 @@ def main():
         # Exit or continue another attempt based on user choice.
         print()
         if input(f"{Colors.BLUE}Do you want to take another quiz? (Y/N): {Colors.RESET}").upper() == "N":
-            print("Goodbye!")
+            print("Thanks for using PyQuiz!")
             break
 
 if __name__ == "__main__":
