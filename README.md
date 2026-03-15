@@ -35,6 +35,7 @@ oop-project/
 
 1. Install Python 3 on your device.
 2. Save the source code as `main.py` if you are setting the project up manually.
+   - Alternatively, you can clone the project using `git clone https://github.com/aaronfilarca/oop-project`
 3. Prepare the files and project folders in one main project directory.
 4. Make sure the program structure includes these components:
 
@@ -247,6 +248,16 @@ py main.py
 - Questions and answer options are shuffled every attempt.
 - Students cannot exceed the configured number of attempts for the same quiz file.
 - If the timer expires, the quiz ends immediately.
+
+## AI Disclosure
+
+Artificial intelligence tools were used to support parts of this project.
+
+- AI was used to help generate sample quiz sets for files such as `math.csv` and `science.csv`.
+- AI was used to help generate and refine this `README.md` documentation.
+- AI was used to insert comments in `main.py` and improve the grammar and clarity of existing comments.
+
+All generated content was reviewed and adjusted to match the project requirements and current program behavior.
 
 ## Troubleshooting
 
