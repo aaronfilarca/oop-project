@@ -16,7 +16,7 @@ PyQuiz is a terminal-based Python quiz app for running timed, repeatable quiz se
 ## Project Structure
 
 ```text
-oop-project/
+PyQuiz/
 |-- main.py
 |-- config.csv
 |-- scores.csv
