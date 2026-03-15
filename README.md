@@ -251,13 +251,18 @@ py main.py
 
 ## AI Disclosure
 
-Artificial intelligence tools were used to support parts of this project.
+Artificial intelligence tools were used to support selected parts of this project.
 
-- AI was used to help generate sample quiz sets for files such as `math.csv` and `science.csv`.
-- AI was used to help generate and refine this `README.md` documentation.
-- AI was used to insert comments in `main.py` and improve the grammar and clarity of existing comments.
+- AI-assisted tools were used in generating sample quiz sets for files such as `math.csv` and `science.csv`.
+- AI-assisted tools were used in drafting and refining this `README.md` documentation.
+- AI-assisted tools were used in inserting comments into `main.py` and improving the grammar and clarity of existing comments.
 
-All generated content was reviewed and adjusted to match the project requirements and current program behavior.
+All AI-assisted content was reviewed and revised to ensure consistency with the project requirements and the current behavior of the program.
+
+## Credits
+
+- Nicole Bernadette Monsanto contributed to the implementation of colored terminal output, user-facing messages, and feedback features.
+- Natalie Jo Agudelo contributed to bug fixing and test execution.
 
 ## Troubleshooting
 
